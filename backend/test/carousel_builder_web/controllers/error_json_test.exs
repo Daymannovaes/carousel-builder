@@ -2,7 +2,9 @@ defmodule CarouselBuilderWeb.ErrorJSONTest do
   use CarouselBuilderWeb.ConnCase, async: true
 
   test "renders 404" do
-    assert CarouselBuilderWeb.ErrorJSON.render("404.json", %{}) == %{errors: %{detail: "Not Found"}}
+    assert CarouselBuilderWeb.ErrorJSON.render("404.json", %{}) == %{
+             errors: %{detail: "Not Found"}
+           }
   end
 
   test "renders 500" do

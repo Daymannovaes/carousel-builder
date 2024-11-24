@@ -22,6 +22,9 @@ erl_crash.dump
 # Temporary files, for example, from tests.
 /tmp/
 
+# Since we are building assets from web/static, we ignore priv/static.
+/priv/static/
+
 # Ignore package tarball (built via "mix hex.build").
 carousel_builder-*.tar
 

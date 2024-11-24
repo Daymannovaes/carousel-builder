@@ -5,7 +5,7 @@ config :carousel_builder, CarouselBuilder.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "carousel_builder_dev",
+  database: "carousel_builder",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

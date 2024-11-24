@@ -46,7 +46,6 @@ defmodule CarouselBuilder.MixProject do
       {:bandit, "~> 1.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: :test},
-      {:csv, "~> 3.2"},
       {:oban, "~> 2.17"},
       {:httpoison, "~> 2.0"}
     ]
