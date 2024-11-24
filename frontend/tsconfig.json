@@ -19,9 +19,14 @@
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "types": [
+            "vitest"
+        ]
     },
     "include": [
-        "src"
+        "src",
+        "tests",
+        "vitest.config.ts"
     ]
 }

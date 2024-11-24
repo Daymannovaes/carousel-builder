@@ -1,8 +1,12 @@
 import './style.css';
 import { getConfiguration, initializeColorPicker } from './settings';
+import { splitText } from './utils/split-text';
 import { CarouselSlide } from './carousel-slide';
+import { createListItems } from './utils/create-list-items';
 
-customElements.define("carousel-slide", CarouselSlide);
+if (!customElements.get("carousel-slide")) {
+    customElements.define("carousel-slide", CarouselSlide);
+}
 
 initializeColorPicker({
     fontColorButton: document.getElementById("fontColorButton") as HTMLElement,
@@ -15,68 +19,24 @@ initializeColorPicker({
 
 const textInput = document.getElementById("textInput")! as HTMLInputElement;
 const submitButton = document.getElementById("submitButton")!;
-const displayText = document.getElementById("displayText")!;
+export const displayText = document.getElementById("displayText")!;
 const charCounter = document.getElementById("charCounter")!;
 const errorMessage = document.getElementById("errorMessage")!;
-
-const splitText = (text: string) => {
-    const words = text.split(" ");
-    const resultingText = [];
-    let currentText = "";
-
-    for (let i = 0; i < words.length; i++) {
-        if (words[i].length > 300) {
-            (errorMessage as HTMLElement).textContent = "Erro: A palavra '" + words[i] + "' tem mais de 300 caracteres."
-            return;
-        }
-
-        currentText += words[i] + " ";
-
-        if (currentText.split(" ").length > 50 || currentText.length > 300) {
-            resultingText.push(currentText.trim());
-            currentText = "";
-        }
-    }
-
-    if (currentText) {
-        resultingText.push(currentText.trim());
-    }
-
-    return resultingText;
-};
-
-const createListItem = (item: string, { fontColor, backgroundColor }: { fontColor: string, backgroundColor: string }) => {
-    const listItem = document.createElement("carousel-slide");
-    listItem.setAttribute('backgroundColor', backgroundColor);
-    listItem.setAttribute('fontColor', fontColor);
-
-    listItem.textContent = item;
-
-    return listItem;
-};
-
-const createListItems = (items: string[], { fontColor, backgroundColor }: { fontColor: string, backgroundColor: string }) => {
-    displayText.innerHTML = '';
-    const ul = document.createElement("ul");
-    ul.classList.add("carousel");
-
-    items.forEach(item => {
-        const listItem = createListItem(item, { fontColor, backgroundColor });
-        ul.appendChild(listItem);
-    });
-
-    displayText.appendChild(ul);
-};
 
 submitButton.addEventListener("click", () => {
     const text = textInput.value;
     errorMessage.textContent = "";
 
+    if (!text) {
+        errorMessage.textContent = "Please enter some text.";
+        return;
+    }
+
     const splitItems = splitText(text);
 
     if (splitItems) {
         const { fontColor, backgroundColor } = getConfiguration();
-        createListItems(splitItems, { fontColor, backgroundColor });
+        createListItems(splitItems, { fontColor, backgroundColor }, displayText);
     }
 
     return;
@@ -85,3 +45,4 @@ submitButton.addEventListener("click", () => {
 textInput.addEventListener("input", () => {
     charCounter.textContent = `Characters: ${textInput.value.length}`;
 });
+
