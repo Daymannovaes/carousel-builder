@@ -18,8 +18,8 @@ defmodule CarouselBuilderWeb.CarouselJSON do
   defp data(%Carousel{} = carousel) do
     %{
       id: carousel.id,
-      carousel: carousel.carousel,
-      status: carousel.status
+      name: carousel.name,
+      is_active: carousel.is_active
     }
   end
 end
