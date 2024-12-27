@@ -20,7 +20,9 @@ defmodule CarouselBuilder.Slides do
 
   """
   def list_slides do
-    Repo.all(Slide)
+    Slide
+    |> Repo.all()
+    |> Repo.preload(:carousel)
   end
 
   @doc """
@@ -37,7 +39,11 @@ defmodule CarouselBuilder.Slides do
       ** (Ecto.NoResultsError)
 
   """
-  def get_slide!(id), do: Repo.get!(Slide, id)
+  def get_slide!(id) do
+    Slide
+    |> Repo.get!(id)
+    |> Repo.preload(:carousel)
+  end
 
   @doc """
   Creates a slide.

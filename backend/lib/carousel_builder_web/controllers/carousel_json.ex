@@ -19,7 +19,20 @@ defmodule CarouselBuilderWeb.CarouselJSON do
     %{
       id: carousel.id,
       name: carousel.name,
-      is_active: carousel.is_active
+      is_active: carousel.is_active,
+      slides: render_slides(carousel.slides)
     }
+  end
+
+  defp render_slides(slides) do
+    Enum.map(slides, fn slide ->
+      %{
+        id: slide.id,
+        background_color: slide.background_color,
+        font_color: slide.font_color,
+        position: slide.position,
+        quill_delta_content: slide.quill_delta_content
+      }
+    end)
   end
 end
