@@ -1,8 +1,10 @@
 defmodule CarouselBuilderWeb.CarouselController do
   use CarouselBuilderWeb, :controller
 
-  alias CarouselBuilder.Carousels
-  alias CarouselBuilder.Carousels.Carousel
+  alias CarouselBuilder.{
+    Carousels,
+    Carousels.Carousel
+  }
 
   action_fallback CarouselBuilderWeb.FallbackController
 
