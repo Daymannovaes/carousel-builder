@@ -8,7 +8,7 @@ defmodule CarouselBuilder.CarouselsTest do
 
     import CarouselBuilder.CarouselsFixtures
 
-    @invalid_attrs %{status: nil, carousel: nil}
+    @invalid_attrs %{name: nil, is_active: nil}
 
     test "list_carousels/0 returns all carousels" do
       carousel = carousel_fixture()
@@ -21,11 +21,11 @@ defmodule CarouselBuilder.CarouselsTest do
     end
 
     test "create_carousel/1 with valid data creates a carousel" do
-      valid_attrs = %{status: true, carousel: %{}}
+      valid_attrs = %{name: "some name", is_active: true}
 
       assert {:ok, %Carousel{} = carousel} = Carousels.create_carousel(valid_attrs)
-      assert carousel.status == true
-      assert carousel.carousel == %{}
+      assert carousel.name == "some name"
+      assert carousel.is_active == true
     end
 
     test "create_carousel/1 with invalid data returns error changeset" do
@@ -34,11 +34,11 @@ defmodule CarouselBuilder.CarouselsTest do
 
     test "update_carousel/2 with valid data updates the carousel" do
       carousel = carousel_fixture()
-      update_attrs = %{status: false, carousel: %{}}
+      update_attrs = %{name: "some updated name", is_active: false}
 
       assert {:ok, %Carousel{} = carousel} = Carousels.update_carousel(carousel, update_attrs)
-      assert carousel.status == false
-      assert carousel.carousel == %{}
+      assert carousel.name == "some updated name"
+      assert carousel.is_active == false
     end
 
     test "update_carousel/2 with invalid data returns error changeset" do

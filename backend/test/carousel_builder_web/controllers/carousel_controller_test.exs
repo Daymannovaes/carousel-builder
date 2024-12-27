@@ -6,14 +6,14 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
   alias CarouselBuilder.Carousels.Carousel
 
   @create_attrs %{
-    status: true,
-    carousel: %{}
+    name: "some name",
+    is_active: true
   }
   @update_attrs %{
-    status: false,
-    carousel: %{}
+    name: "some updated name",
+    is_active: false
   }
-  @invalid_attrs %{status: nil, carousel: nil}
+  @invalid_attrs %{name: nil, is_active: nil}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -35,8 +35,8 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
 
       assert %{
                "id" => ^id,
-               "carousel" => %{},
-               "status" => true
+               "is_active" => true,
+               "name" => "some name"
              } = json_response(conn, 200)["data"]
     end
 
@@ -60,8 +60,8 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
 
       assert %{
                "id" => ^id,
-               "carousel" => %{},
-               "status" => false
+               "is_active" => false,
+               "name" => "some updated name"
              } = json_response(conn, 200)["data"]
     end
 

@@ -3,8 +3,8 @@ defmodule CarouselBuilder.Repo.Migrations.CreateCarousels do
 
   def change do
     create table(:carousels) do
-      add :carousel, :map, default: %{}, null: false
-      add :status, :boolean, default: true, null: false
+      add :name, :string, null: false
+      add :is_active, :boolean, default: true, null: false
 
       timestamps()
     end
