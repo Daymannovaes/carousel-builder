@@ -13,7 +13,7 @@ defmodule CarouselBuilder.Carousels.Carousel do
 
     timestamps()
 
-    has_many :slides, Slide
+    has_many :slides, Slide, preload_order: [asc: :position]
   end
 
   @doc false
