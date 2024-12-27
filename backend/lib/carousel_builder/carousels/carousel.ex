@@ -5,11 +5,15 @@ defmodule CarouselBuilder.Carousels.Carousel do
 
   import Ecto.Changeset
 
+  alias CarouselBuilder.Slides.Slide
+
   schema "carousels" do
     field :name, :string
     field :is_active, :boolean, default: true
 
     timestamps()
+
+    has_many :slides, Slide
   end
 
   @doc false

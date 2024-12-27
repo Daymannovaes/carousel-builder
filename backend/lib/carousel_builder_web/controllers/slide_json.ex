@@ -21,7 +21,16 @@ defmodule CarouselBuilderWeb.SlideJSON do
       background_color: slide.background_color,
       font_color: slide.font_color,
       position: slide.position,
-      quill_delta_content: slide.quill_delta_content
+      quill_delta_content: slide.quill_delta_content,
+      carousel: render_carousel(slide.carousel)
+    }
+  end
+
+  defp render_carousel(carousel) do
+    %{
+      id: carousel.id,
+      name: carousel.name,
+      is_active: carousel.is_active
     }
   end
 end
