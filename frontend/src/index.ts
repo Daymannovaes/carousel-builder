@@ -3,6 +3,9 @@ import { getConfiguration, initializeColorPicker } from './settings';
 import { splitText } from './utils/split-text';
 import { CarouselSlide } from './carousel-slide';
 import { createListItems } from './utils/create-list-items';
+import { testBackendConnection } from './utils/testConnection';
+
+testBackendConnection();
 
 if (!customElements.get("carousel-slide")) {
     customElements.define("carousel-slide", CarouselSlide);
