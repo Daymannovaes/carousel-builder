@@ -5,17 +5,21 @@ defmodule CarouselBuilder.Carousels.Carousel do
 
   import Ecto.Changeset
 
+  alias CarouselBuilder.Slides.Slide
+
   schema "carousels" do
-    field :carousel, :map, default: %{}
-    field :status, :boolean, default: true
+    field :name, :string
+    field :is_active, :boolean, default: true
 
     timestamps()
+
+    has_many :slides, Slide, preload_order: [asc: :position]
   end
 
   @doc false
   def changeset(carousel, attrs) do
     carousel
-    |> cast(attrs, [:carousel, :status])
-    |> validate_required([:carousel, :status])
+    |> cast(attrs, [:name, :is_active])
+    |> validate_required([:name, :is_active])
   end
 end

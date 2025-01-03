@@ -11,8 +11,8 @@ defmodule CarouselBuilder.CarouselsFixtures do
     {:ok, carousel} =
       attrs
       |> Enum.into(%{
-        carousel: %{},
-        status: true
+        is_active: true,
+        name: "some name"
       })
       |> CarouselBuilder.Carousels.create_carousel()
 

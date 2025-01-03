@@ -1,4 +1,5 @@
 import './style.css';
+import { CarouselsAPI } from './api/api.js';
 import { getConfiguration, initializeColorPicker } from './settings';
 import { splitText } from './utils/split-text';
 import { CarouselSlide } from './carousel-slide';
@@ -27,6 +28,7 @@ const charCounter = document.getElementById("charCounter")!;
 const errorMessage = document.getElementById("errorMessage")!;
 
 submitButton.addEventListener("click", () => {
+    CarouselsAPI.getAll().then(data => console.log(data));
     const text = textInput.value;
     errorMessage.textContent = "";
 
