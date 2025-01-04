@@ -7,7 +7,7 @@ defmodule CarouselBuilder.Repo.Migrations.CreateSlides do
       add :font_color, :string, null: false
       add :position, :integer, null: false
       add :quill_delta_content, :text
-      add :carousel_id, references(:carousels, on_delete: :all)
+      add :carousel_id, references(:carousels, on_delete: :delete_all)
 
       timestamps()
     end
