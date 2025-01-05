@@ -40,10 +40,14 @@ defmodule CarouselBuilderWeb.SlideController do
   def update(conn, %{"id" => id, "slide" => slide_params}) do
     case id_is_valid?(id) do
       true ->
-        slide = Slides.get_slide(id)
+        case Slides.get_slide(id) do
+          nil ->
+            {:error, :not_found}
 
-        with {:ok, %Slide{} = slide} <- Slides.update_slide(slide, slide_params) do
-          render(conn, :show, slide: slide)
+          slide ->
+            with {:ok, %Slide{} = slide} <- Slides.update_slide(slide, slide_params) do
+              render(conn, :show, slide: slide)
+            end
         end
 
       _ ->
@@ -54,10 +58,16 @@ defmodule CarouselBuilderWeb.SlideController do
   def delete(conn, %{"id" => id}) do
     case id_is_valid?(id) do
       true ->
-        slide = Slides.get_slide(id)
+        case Slides.get_slide(id) do
+          nil ->
+            {:error, :not_found}
 
-        with {:ok, %Slide{}} <- Slides.delete_slide(slide) do
-          send_resp(conn, :no_content, "")
+          slide ->
+            with {:ok, %Slide{}} <- Slides.delete_slide(slide) do
+              conn
+              |> put_status(:ok)
+              |> json(%{message: "Slide deleted successfully", id: id})
+            end
         end
 
       _ ->

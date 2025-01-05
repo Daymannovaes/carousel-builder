@@ -40,10 +40,15 @@ defmodule CarouselBuilderWeb.CarouselController do
   def update(conn, %{"id" => id, "carousel" => carousel_params}) do
     case id_is_valid?(id) do
       true ->
-        carousel = Carousels.get_carousel(id)
+        case Carousels.get_carousel(id) do
+          nil ->
+            {:error, :not_found}
 
-        with {:ok, %Carousel{} = carousel} <- Carousels.update_carousel(carousel, carousel_params) do
-          render(conn, :show, carousel: carousel)
+          carousel ->
+            with {:ok, %Carousel{} = carousel} <-
+                   Carousels.update_carousel(carousel, carousel_params) do
+              render(conn, :show, carousel: carousel)
+            end
         end
 
       _ ->
@@ -54,10 +59,16 @@ defmodule CarouselBuilderWeb.CarouselController do
   def delete(conn, %{"id" => id}) do
     case id_is_valid?(id) do
       true ->
-        carousel = Carousels.get_carousel(id)
+        case Carousels.get_carousel(id) do
+          nil ->
+            {:error, :not_found}
 
-        with {:ok, %Carousel{}} <- Carousels.delete_carousel(carousel) do
-          send_resp(conn, :no_content, "")
+          carousel ->
+            with {:ok, %Carousel{}} <- Carousels.delete_carousel(carousel) do
+              conn
+              |> put_status(:ok)
+              |> json(%{message: "Carousel deleted successfully", id: id})
+            end
         end
 
       _ ->
