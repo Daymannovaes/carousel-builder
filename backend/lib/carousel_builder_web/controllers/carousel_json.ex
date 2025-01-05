@@ -24,7 +24,7 @@ defmodule CarouselBuilderWeb.CarouselJSON do
     }
   end
 
-  defp render_slides(slides) do
+  defp render_slides(slides) when is_list(slides) do
     Enum.map(slides, fn slide ->
       %{
         id: slide.id,
@@ -35,4 +35,5 @@ defmodule CarouselBuilderWeb.CarouselJSON do
       }
     end)
   end
+  defp render_slides(_), do: []
 end

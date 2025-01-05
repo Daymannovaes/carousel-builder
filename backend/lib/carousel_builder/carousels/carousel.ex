@@ -10,7 +10,6 @@ defmodule CarouselBuilder.Carousels.Carousel do
   schema "carousels" do
     field :name, :string
     field :is_active, :boolean, default: true
-
     timestamps()
 
     has_many :slides, Slide, preload_order: [asc: :position]

@@ -12,10 +12,9 @@ defmodule CarouselBuilder.Slides.Slide do
     field :background_color, :string
     field :font_color, :string
     field :quill_delta_content, :string
+    timestamps()
 
     belongs_to :carousel, Carousel
-
-    timestamps()
   end
 
   @doc false
