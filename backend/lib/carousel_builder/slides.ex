@@ -28,21 +28,22 @@ defmodule CarouselBuilder.Slides do
   @doc """
   Gets a single slide.
 
-  Raises `Ecto.NoResultsError` if the Slide does not exist.
+  Returns `nil` if the Slide does not exist.
 
   ## Examples
 
-      iex> get_slide!(123)
+      iex> get_slide(123)
       %Slide{}
 
-      iex> get_slide!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_slide(456)
+      nil
 
   """
-  def get_slide!(id) do
-    Slide
-    |> Repo.get!(id)
-    |> Repo.preload(:carousel)
+  def get_slide(id) do
+    case Repo.get(Slide, id) do
+      nil -> nil
+      slide -> Repo.preload(slide, :carousel)
+    end
   end
 
   @doc """

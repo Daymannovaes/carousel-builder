@@ -1,6 +1,8 @@
 defmodule CarouselBuilderWeb.CarouselController do
   use CarouselBuilderWeb, :controller
 
+  import CarouselBuilderWeb.Helpers
+
   alias CarouselBuilder.{
     Carousels,
     Carousels.Carousel
@@ -23,23 +25,43 @@ defmodule CarouselBuilderWeb.CarouselController do
   end
 
   def show(conn, %{"id" => id}) do
-    carousel = Carousels.get_carousel!(id)
-    render(conn, :show, carousel: carousel)
+    case id_is_valid?(id) do
+      true ->
+        case Carousels.get_carousel(id) do
+          nil -> {:error, :not_found}
+          carousel -> render(conn, :show, carousel: carousel)
+        end
+
+      _ ->
+        {:error, :bad_request}
+    end
   end
 
   def update(conn, %{"id" => id, "carousel" => carousel_params}) do
-    carousel = Carousels.get_carousel!(id)
+    case id_is_valid?(id) do
+      true ->
+        carousel = Carousels.get_carousel(id)
 
-    with {:ok, %Carousel{} = carousel} <- Carousels.update_carousel(carousel, carousel_params) do
-      render(conn, :show, carousel: carousel)
+        with {:ok, %Carousel{} = carousel} <- Carousels.update_carousel(carousel, carousel_params) do
+          render(conn, :show, carousel: carousel)
+        end
+
+      _ ->
+        {:error, :bad_request}
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    carousel = Carousels.get_carousel!(id)
+    case id_is_valid?(id) do
+      true ->
+        carousel = Carousels.get_carousel(id)
 
-    with {:ok, %Carousel{}} <- Carousels.delete_carousel(carousel) do
-      send_resp(conn, :no_content, "")
+        with {:ok, %Carousel{}} <- Carousels.delete_carousel(carousel) do
+          send_resp(conn, :no_content, "")
+        end
+
+      _ ->
+        {:error, :bad_request}
     end
   end
 end

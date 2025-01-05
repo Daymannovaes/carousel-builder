@@ -1,8 +1,12 @@
 defmodule CarouselBuilderWeb.SlideController do
   use CarouselBuilderWeb, :controller
 
-  alias CarouselBuilder.Slides
-  alias CarouselBuilder.Slides.Slide
+  import CarouselBuilderWeb.Helpers
+
+  alias CarouselBuilder.{
+    Slides,
+    Slides.Slide
+  }
 
   action_fallback CarouselBuilderWeb.FallbackController
 
@@ -21,23 +25,43 @@ defmodule CarouselBuilderWeb.SlideController do
   end
 
   def show(conn, %{"id" => id}) do
-    slide = Slides.get_slide!(id)
-    render(conn, :show, slide: slide)
+    case id_is_valid?(id) do
+      true ->
+        case Slides.get_slide(id) do
+          nil -> {:error, :not_found}
+          slide -> render(conn, :show, slide: slide)
+        end
+
+      _ ->
+        {:error, :bad_request}
+    end
   end
 
   def update(conn, %{"id" => id, "slide" => slide_params}) do
-    slide = Slides.get_slide!(id)
+    case id_is_valid?(id) do
+      true ->
+        slide = Slides.get_slide(id)
 
-    with {:ok, %Slide{} = slide} <- Slides.update_slide(slide, slide_params) do
-      render(conn, :show, slide: slide)
+        with {:ok, %Slide{} = slide} <- Slides.update_slide(slide, slide_params) do
+          render(conn, :show, slide: slide)
+        end
+
+      _ ->
+        {:error, :bad_request}
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    slide = Slides.get_slide!(id)
+    case id_is_valid?(id) do
+      true ->
+        slide = Slides.get_slide(id)
 
-    with {:ok, %Slide{}} <- Slides.delete_slide(slide) do
-      send_resp(conn, :no_content, "")
+        with {:ok, %Slide{}} <- Slides.delete_slide(slide) do
+          send_resp(conn, :no_content, "")
+        end
+
+      _ ->
+        {:error, :bad_request}
     end
   end
 end
