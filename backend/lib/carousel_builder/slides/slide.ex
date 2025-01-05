@@ -21,12 +21,6 @@ defmodule CarouselBuilder.Slides.Slide do
   def changeset(slide, attrs) do
     slide
     |> cast(attrs, [:background_color, :font_color, :position, :quill_delta_content, :carousel_id])
-    |> validate_required([
-      :background_color,
-      :font_color,
-      :position,
-      :quill_delta_content,
-      :carousel_id
-    ])
+    |> validate_required([:background_color, :font_color, :position, :quill_delta_content])
   end
 end

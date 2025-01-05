@@ -19,6 +19,7 @@ defmodule CarouselBuilder.Carousels.Carousel do
   def changeset(carousel, attrs) do
     carousel
     |> cast(attrs, [:name, :is_active])
+    |> cast_assoc(:slides, with: &Slide.changeset/2)
     |> validate_required([:name, :is_active])
   end
 end

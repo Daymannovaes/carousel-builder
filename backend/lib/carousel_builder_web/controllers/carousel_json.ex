@@ -35,5 +35,6 @@ defmodule CarouselBuilderWeb.CarouselJSON do
       }
     end)
   end
+
   defp render_slides(_), do: []
 end
