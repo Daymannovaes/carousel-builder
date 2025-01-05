@@ -12,7 +12,7 @@ defmodule CarouselBuilder.Carousels.Carousel do
     field :is_active, :boolean, default: true
     timestamps()
 
-    has_many :slides, Slide, preload_order: [asc: :position]
+    has_many :slides, Slide, preload_order: [asc: :position], on_replace: :delete
   end
 
   @doc false
