@@ -25,7 +25,7 @@ defmodule CarouselBuilderWeb.CarouselController do
   end
 
   def show(conn, %{"id" => id}) do
-    case id_is_valid?(id) do
+    case value_is_positive_integer?(id) do
       true ->
         case Carousels.get_carousel(id) do
           nil -> {:error, :not_found}
@@ -38,7 +38,7 @@ defmodule CarouselBuilderWeb.CarouselController do
   end
 
   def update(conn, %{"id" => id, "carousel" => carousel_params}) do
-    case id_is_valid?(id) do
+    case value_is_positive_integer?(id) do
       true ->
         case Carousels.get_carousel(id) do
           nil ->
@@ -57,7 +57,7 @@ defmodule CarouselBuilderWeb.CarouselController do
   end
 
   def delete(conn, %{"id" => id}) do
-    case id_is_valid?(id) do
+    case value_is_positive_integer?(id) do
       true ->
         case Carousels.get_carousel(id) do
           nil ->

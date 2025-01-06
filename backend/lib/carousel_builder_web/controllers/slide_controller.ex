@@ -16,7 +16,7 @@ defmodule CarouselBuilderWeb.SlideController do
   end
 
   def create(conn, %{"slide" => slide_params}) do
-    case id_is_valid?(slide_params["carousel_id"]) do
+    case value_is_positive_integer?(slide_params["carousel_id"]) do
       true ->
         case Slides.create_slide(slide_params) do
           {:ok, %Slide{} = slide} ->
@@ -35,7 +35,7 @@ defmodule CarouselBuilderWeb.SlideController do
   end
 
   def show(conn, %{"id" => id}) do
-    case id_is_valid?(id) do
+    case value_is_positive_integer?(id) do
       true ->
         case Slides.get_slide(id) do
           nil -> {:error, :not_found}
@@ -48,7 +48,7 @@ defmodule CarouselBuilderWeb.SlideController do
   end
 
   def update(conn, %{"id" => id, "slide" => slide_params}) do
-    case id_is_valid?(id) do
+    case value_is_positive_integer?(id) do
       true ->
         case Slides.get_slide(id) do
           nil ->
@@ -66,7 +66,7 @@ defmodule CarouselBuilderWeb.SlideController do
   end
 
   def delete(conn, %{"id" => id}) do
-    case id_is_valid?(id) do
+    case value_is_positive_integer?(id) do
       true ->
         case Slides.get_slide(id) do
           nil ->

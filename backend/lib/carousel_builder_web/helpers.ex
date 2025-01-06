@@ -3,12 +3,16 @@ defmodule CarouselBuilderWeb.Helpers do
   A collection of reusable helper functions for various tasks in the application.
   """
 
-  def id_is_valid?(id) when is_binary(id) do
-    case Integer.parse(id) do
+  def value_is_positive_integer?(value) when is_integer(value) do
+    value > 0
+  end
+
+  def value_is_positive_integer?(value) when is_binary(value) do
+    case Integer.parse(value) do
       {int, ""} when int > 0 -> true
       _ -> false
     end
   end
 
-  def id_is_valid?(_id), do: false
+  def value_is_positive_integer?(_value), do: false
 end
