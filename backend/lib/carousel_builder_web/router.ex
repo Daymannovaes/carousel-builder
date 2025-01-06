@@ -11,6 +11,9 @@ defmodule CarouselBuilderWeb.Router do
 
     resources "/carousels", CarouselController
     resources "/slides", SlideController
+
+    put "/carousels/:id/slides", CarouselController, :update
+    put "/carousels/:id/settings", CarouselController, :update_settings
   end
 
   # Enable Swoosh mailbox preview in development

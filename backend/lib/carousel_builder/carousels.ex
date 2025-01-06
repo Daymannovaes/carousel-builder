@@ -7,7 +7,8 @@ defmodule CarouselBuilder.Carousels do
 
   alias CarouselBuilder.{
     Carousels.Carousel,
-    Repo
+    Repo,
+    Slides.Slide
   }
 
   @doc """
@@ -82,6 +83,32 @@ defmodule CarouselBuilder.Carousels do
     carousel
     |> Carousel.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Updates all slides settings from a carousel.
+
+  ## Examples
+
+      iex> update_all_slides_settings(carousel, %{field: new_value})
+      %Carousel{}
+
+      iex> update_all_slides_settings(carousel, %{field: bad_value})
+      %Carousel{}
+
+  """
+  def update_all_slides_settings(%Carousel{} = carousel, %{
+        "background_color" => background_color,
+        "font_color" => font_color
+      }) do
+    Slide
+    |> where([s], s.carousel_id == ^carousel.id)
+    |> update(set: [background_color: ^background_color, font_color: ^font_color])
+    |> Repo.update_all([])
+
+    Carousel
+    |> Repo.get(carousel.id)
+    |> Repo.preload(:slides)
   end
 
   @doc """
