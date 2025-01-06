@@ -15,9 +15,9 @@ defmodule CarouselBuilder.CarouselsTest do
       assert Carousels.list_carousels() == [carousel]
     end
 
-    test "get_carousel!/1 returns the carousel with given id" do
+    test "get_carousel/1 returns the carousel with given id" do
       carousel = carousel_fixture()
-      assert Carousels.get_carousel!(carousel.id) == carousel
+      assert Carousels.get_carousel(carousel.id) == carousel
     end
 
     test "create_carousel/1 with valid data creates a carousel" do
@@ -44,13 +44,13 @@ defmodule CarouselBuilder.CarouselsTest do
     test "update_carousel/2 with invalid data returns error changeset" do
       carousel = carousel_fixture()
       assert {:error, %Ecto.Changeset{}} = Carousels.update_carousel(carousel, @invalid_attrs)
-      assert carousel == Carousels.get_carousel!(carousel.id)
+      assert carousel == Carousels.get_carousel(carousel.id)
     end
 
     test "delete_carousel/1 deletes the carousel" do
       carousel = carousel_fixture()
       assert {:ok, %Carousel{}} = Carousels.delete_carousel(carousel)
-      assert_raise Ecto.NoResultsError, fn -> Carousels.get_carousel!(carousel.id) end
+      assert nil = Carousels.get_carousel(carousel.id)
     end
 
     test "change_carousel/1 returns a carousel changeset" do

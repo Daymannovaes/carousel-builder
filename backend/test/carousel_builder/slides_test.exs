@@ -20,9 +20,9 @@ defmodule CarouselBuilder.SlidesTest do
       assert Slides.list_slides() == [slide]
     end
 
-    test "get_slide!/1 returns the slide with given id" do
+    test "get_slide/1 returns the slide with given id" do
       slide = slide_fixture()
-      assert Slides.get_slide!(slide.id) == slide
+      assert Slides.get_slide(slide.id) == slide
     end
 
     test "create_slide/1 with valid data creates a slide" do
@@ -64,13 +64,13 @@ defmodule CarouselBuilder.SlidesTest do
     test "update_slide/2 with invalid data returns error changeset" do
       slide = slide_fixture()
       assert {:error, %Ecto.Changeset{}} = Slides.update_slide(slide, @invalid_attrs)
-      assert slide == Slides.get_slide!(slide.id)
+      assert slide == Slides.get_slide(slide.id)
     end
 
     test "delete_slide/1 deletes the slide" do
       slide = slide_fixture()
       assert {:ok, %Slide{}} = Slides.delete_slide(slide)
-      assert_raise Ecto.NoResultsError, fn -> Slides.get_slide!(slide.id) end
+      assert nil = Slides.get_slide(slide.id)
     end
 
     test "change_slide/1 returns a slide changeset" do
