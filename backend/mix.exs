@@ -55,7 +55,8 @@ defmodule CarouselBuilder.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: :test},
       {:oban, "~> 2.17"},
-      {:httpoison, "~> 2.0"}
+      {:httpoison, "~> 2.0"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 

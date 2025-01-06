@@ -64,3 +64,9 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# Configure allowed origins
+config :cors_plug,
+  origin: ["http://localhost:5173"],
+  max_age: 86400,
+  methods: ["GET", "POST", "PUT", "DELETE"]
