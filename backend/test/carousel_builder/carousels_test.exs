@@ -50,7 +50,7 @@ defmodule CarouselBuilder.CarouselsTest do
     test "delete_carousel/1 deletes the carousel" do
       carousel = carousel_fixture()
       assert {:ok, %Carousel{}} = Carousels.delete_carousel(carousel)
-      assert nil = Carousels.get_carousel(carousel.id)
+      assert nil == Carousels.get_carousel(carousel.id)
     end
 
     test "change_carousel/1 returns a carousel changeset" do

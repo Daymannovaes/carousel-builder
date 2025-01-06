@@ -1,7 +1,10 @@
 defmodule CarouselBuilderWeb.SlideControllerTest do
   use CarouselBuilderWeb.ConnCase
 
-  import CarouselBuilder.SlidesFixtures
+  import CarouselBuilder.{
+    CarouselsFixtures,
+    SlidesFixtures
+  }
 
   alias CarouselBuilder.Slides.Slide
 
@@ -37,7 +40,10 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
 
   describe "create slide" do
     test "renders slide when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/slides", slide: @create_attrs)
+      carousel = carousel_fixture()
+      valid_attrs = Map.put(@create_attrs, :carousel_id, carousel.id)
+
+      conn = post(conn, ~p"/api/slides", slide: valid_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, ~p"/api/slides/#{id}")
@@ -51,9 +57,25 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn} do
+    test "renders errors when data and carousel are invalid", %{conn: conn} do
       conn = post(conn, ~p"/api/slides", slide: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
+    end
+
+    test "renders errors when data is invalid but carousel is valid", %{conn: conn} do
+      carousel = carousel_fixture()
+      invalid_attrs = Map.put(@invalid_attrs, :carousel_id, carousel.id)
+
+      conn = post(conn, ~p"/api/slides", slide: invalid_attrs)
+
+      assert json_response(conn, 422) == %{
+               "errors" => %{
+                 "background_color" => ["can't be blank"],
+                 "font_color" => ["can't be blank"],
+                 "position" => ["can't be blank"],
+                 "quill_delta_content" => ["can't be blank"]
+               }
+             }
     end
   end
 
@@ -86,16 +108,16 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
 
     test "deletes chosen slide", %{conn: conn, slide: slide} do
       conn = delete(conn, ~p"/api/slides/#{slide}")
-      assert response(conn, 204)
+      assert json_response(conn, 200)["message"] == "Slide deleted successfully"
 
-      assert_error_sent 404, fn ->
-        get(conn, ~p"/api/slides/#{slide}")
-      end
+      conn = get(conn, ~p"/api/slides/#{slide}")
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
     end
   end
 
   defp create_slide(_) do
-    slide = slide_fixture()
-    %{slide: slide}
+    carousel = carousel_fixture()
+    slide = slide_fixture(%{carousel_id: carousel.id})
+    %{carousel: carousel, slide: slide}
   end
 end

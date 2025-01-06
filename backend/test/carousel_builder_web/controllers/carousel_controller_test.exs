@@ -76,11 +76,10 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
 
     test "deletes chosen carousel", %{conn: conn, carousel: carousel} do
       conn = delete(conn, ~p"/api/carousels/#{carousel}")
-      assert response(conn, 204)
+      assert json_response(conn, 200)["message"] == "Carousel deleted successfully"
 
-      assert_error_sent 404, fn ->
-        get(conn, ~p"/api/carousels/#{carousel}")
-      end
+      conn = get(conn, ~p"/api/carousels/#{carousel}")
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
     end
   end
 

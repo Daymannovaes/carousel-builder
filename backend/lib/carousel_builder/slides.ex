@@ -62,6 +62,14 @@ defmodule CarouselBuilder.Slides do
     %Slide{}
     |> Slide.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, slide} ->
+        slide_with_carousel = Repo.preload(slide, :carousel)
+        {:ok, slide_with_carousel}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   @doc """

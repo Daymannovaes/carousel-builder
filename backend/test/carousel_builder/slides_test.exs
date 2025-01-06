@@ -70,7 +70,7 @@ defmodule CarouselBuilder.SlidesTest do
     test "delete_slide/1 deletes the slide" do
       slide = slide_fixture()
       assert {:ok, %Slide{}} = Slides.delete_slide(slide)
-      assert nil = Slides.get_slide(slide.id)
+      assert nil == Slides.get_slide(slide.id)
     end
 
     test "change_slide/1 returns a slide changeset" do

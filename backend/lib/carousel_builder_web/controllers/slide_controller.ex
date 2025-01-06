@@ -16,11 +16,21 @@ defmodule CarouselBuilderWeb.SlideController do
   end
 
   def create(conn, %{"slide" => slide_params}) do
-    with {:ok, %Slide{} = slide} <- Slides.create_slide(slide_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/slides/#{slide}")
-      |> render(:show, slide: slide)
+    case id_is_valid?(slide_params["carousel_id"]) do
+      true ->
+        case Slides.create_slide(slide_params) do
+          {:ok, %Slide{} = slide} ->
+            conn
+            |> put_status(:created)
+            |> put_resp_header("location", ~p"/api/slides/#{slide}")
+            |> render(:show, slide: slide)
+
+          {:error, changeset} ->
+            {:error, changeset}
+        end
+
+      _ ->
+        {:error, :bad_request}
     end
   end
 

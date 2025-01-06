@@ -22,5 +22,6 @@ defmodule CarouselBuilder.Slides.Slide do
     slide
     |> cast(attrs, [:background_color, :font_color, :position, :quill_delta_content, :carousel_id])
     |> validate_required([:background_color, :font_color, :position, :quill_delta_content])
+    |> foreign_key_constraint(:carousel_id, name: :slides_carousel_id_fkey)
   end
 end

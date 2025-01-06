@@ -12,7 +12,8 @@ defmodule CarouselBuilder.CarouselsFixtures do
       attrs
       |> Enum.into(%{
         is_active: true,
-        name: "some name"
+        name: "some name",
+        slides: []
       })
       |> CarouselBuilder.Carousels.create_carousel()
 
