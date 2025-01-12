@@ -8,23 +8,27 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
   @create_attrs %{
     name: "some name",
     is_active: true,
-    slides: [%{
-      background_color: "#FFFFFF",
-      font_color: "#000000",
-      position: 1,
-      quill_delta_content: "quill_content_1"
-    }]
+    slides: [
+      %{
+        background_color: "#FFFFFF",
+        font_color: "#000000",
+        position: 1,
+        quill_delta_content: "quill_content_1"
+      }
+    ]
   }
 
   @update_attrs %{
     name: "some updated name",
     is_active: false,
-    slides: [%{
-      background_color: "#000000",
-      font_color: "#FFFFFF",
-      position: 1,
-      quill_delta_content: "quill_content_2"
-    }]
+    slides: [
+      %{
+        background_color: "#000000",
+        font_color: "#FFFFFF",
+        position: 1,
+        quill_delta_content: "quill_content_2"
+      }
+    ]
   }
   @invalid_attrs %{name: nil, is_active: nil}
 
@@ -50,12 +54,14 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
                "id" => ^id,
                "is_active" => true,
                "name" => "some name",
-               "slides" => [%{
-                  "background_color" => "#FFFFFF",
-                  "font_color" => "#000000",
-                  "position" => 1,
-                  "quill_delta_content" => "quill_content_1"
-                }]
+               "slides" => [
+                 %{
+                   "background_color" => "#FFFFFF",
+                   "font_color" => "#000000",
+                   "position" => 1,
+                   "quill_delta_content" => "quill_content_1"
+                 }
+               ]
              } = json_response(conn, 200)["data"]
     end
 
@@ -81,12 +87,14 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
                "id" => ^id,
                "is_active" => false,
                "name" => "some updated name",
-               "slides" => [%{
-                  "background_color" => "#000000",
-                  "font_color" => "#FFFFFF",
-                  "position" => 1,
-                  "quill_delta_content" => "quill_content_2"
-                }]
+               "slides" => [
+                 %{
+                   "background_color" => "#000000",
+                   "font_color" => "#FFFFFF",
+                   "position" => 1,
+                   "quill_delta_content" => "quill_content_2"
+                 }
+               ]
              } = json_response(conn, 200)["data"]
     end
 

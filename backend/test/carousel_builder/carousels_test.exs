@@ -61,22 +61,23 @@ defmodule CarouselBuilder.CarouselsTest do
     end
 
     test "update_all_slides_settings/2 with valid params updates all slides of a carousel" do
-      carousel = carousel_fixture(%{
-        slides: [
-          %{
-            background_color: "#FFFFFF",
-            font_color: "#000000",
-            position: 1,
-            quill_delta_content: "quill_content_1"
-          },
-          %{
-            background_color: "#FF0000",
-            font_color: "#00FF00",
-            position: 2,
-            quill_delta_content: "quill_content_2"
-          }
-        ]
-      })
+      carousel =
+        carousel_fixture(%{
+          slides: [
+            %{
+              background_color: "#FFFFFF",
+              font_color: "#000000",
+              position: 1,
+              quill_delta_content: "quill_content_1"
+            },
+            %{
+              background_color: "#FF0000",
+              font_color: "#00FF00",
+              position: 2,
+              quill_delta_content: "quill_content_2"
+            }
+          ]
+        })
 
       settings = %{
         "background_color" => "#0000FF",
@@ -86,8 +87,8 @@ defmodule CarouselBuilder.CarouselsTest do
       updated_carousel = Carousels.update_all_slides_settings(carousel, settings)
 
       assert Enum.all?(updated_carousel.slides, fn slide ->
-        slide.background_color == "#0000FF" and slide.font_color == "#FFFFFF"
-      end)
+               slide.background_color == "#0000FF" and slide.font_color == "#FFFFFF"
+             end)
 
       assert length(updated_carousel.slides) == 2
     end
@@ -101,8 +102,11 @@ defmodule CarouselBuilder.CarouselsTest do
 
       invalid_params_type = nil
 
-      assert {:error, "Invalid input"} == Carousels.update_all_slides_settings(carousel, invalid_settings)
-      assert {:error, "Invalid input"} == Carousels.update_all_slides_settings(carousel, invalid_params_type)
+      assert {:error, "Invalid input"} ==
+               Carousels.update_all_slides_settings(carousel, invalid_settings)
+
+      assert {:error, "Invalid input"} ==
+               Carousels.update_all_slides_settings(carousel, invalid_params_type)
     end
 
     test "update_all_slides_settings/2 with invalid carousel returns nil" do
