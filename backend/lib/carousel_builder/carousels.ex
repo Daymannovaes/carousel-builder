@@ -94,22 +94,37 @@ defmodule CarouselBuilder.Carousels do
       %Carousel{}
 
       iex> update_all_slides_settings(carousel, %{field: bad_value})
-      %Carousel{}
+      {:error, "Invalid input"}
 
   """
-  def update_all_slides_settings(%Carousel{} = carousel, %{
-        "background_color" => background_color,
-        "font_color" => font_color
-      }) do
-    Slide
-    |> where([s], s.carousel_id == ^carousel.id)
-    |> update(set: [background_color: ^background_color, font_color: ^font_color])
-    |> Repo.update_all([])
+  def update_all_slides_settings(%Carousel{} = carousel, params) when is_map(params) do
+    allowed_params = [
+      "background_color",
+      "font_color"
+    ]
 
-    Carousel
-    |> Repo.get(carousel.id)
-    |> Repo.preload(:slides)
+    settings =
+      params
+      |> Enum.filter(fn {key, _value} -> key in allowed_params end)
+      |> Enum.map(fn {key, value} -> {String.to_atom(key), value} end)
+      |> Enum.into(%{})
+      |> Map.to_list()
+
+    if settings == [] do
+      {:error, "Invalid input"}
+    else
+      Slide
+      |> where([s], s.carousel_id == ^carousel.id)
+      |> update(set: ^settings)
+      |> Repo.update_all([])
+
+      Carousel
+      |> Repo.get(carousel.id)
+      |> Repo.preload(:slides)
+    end
   end
+
+  def update_all_slides_settings(_, _), do: {:error, "Invalid input"}
 
   @doc """
   Deletes a carousel.
