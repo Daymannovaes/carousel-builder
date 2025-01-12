@@ -106,12 +106,19 @@ defmodule CarouselBuilder.Carousels do
     settings =
       params
       |> Enum.filter(fn {key, _value} -> key in allowed_params end)
-      |> Enum.map(fn {key, value} -> {String.to_atom(key), value} end)
+      |> Enum.map(fn {key, value} ->
+        case {key, value} do
+          {"background_color", value} when is_binary(value) -> {String.to_atom(key), value}
+          {"font_color", value} when is_binary(value) -> {String.to_atom(key), value}
+          _ -> nil
+        end
+      end)
+      |> Enum.filter(& &1)
       |> Enum.into(%{})
       |> Map.to_list()
 
     if settings == [] do
-      {:error, "Invalid input"}
+      {:error, :bad_request}
     else
       Slide
       |> where([s], s.carousel_id == ^carousel.id)
@@ -124,7 +131,7 @@ defmodule CarouselBuilder.Carousels do
     end
   end
 
-  def update_all_slides_settings(_, _), do: {:error, "Invalid input"}
+  def update_all_slides_settings(_, _), do: {:error, :bad_request}
 
   @doc """
   Deletes a carousel.
