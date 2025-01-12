@@ -38,6 +38,27 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
     end
   end
 
+  describe "show slide" do
+    setup [:create_slide]
+
+    test "renders slide when id is valid", %{conn: conn, slide: %Slide{id: id}} do
+      conn = get(conn, ~p"/api/slides/#{id}")
+      assert json_response(conn, 200)["data"]["id"] == id
+    end
+
+    test "returns error when slide is not found", %{conn: conn} do
+      non_existing_id = 42
+
+      conn = get(conn, ~p"/api/slides/#{non_existing_id}")
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
+    end
+
+    test "returns error when passing invalid param", %{conn: conn} do
+      conn = get(conn, ~p"/api/slides/abc")
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
+    end
+  end
+
   describe "create slide" do
     test "renders slide when data is valid", %{conn: conn} do
       carousel = carousel_fixture()
@@ -101,6 +122,18 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
       conn = put(conn, ~p"/api/slides/#{slide}", slide: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
+
+    test "returns error when slide is not found", %{conn: conn} do
+      non_existing_id = 42
+
+      conn = put(conn, ~p"/api/slides/#{non_existing_id}", slide: @update_attrs)
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
+    end
+
+    test "returns error when passing invalid param", %{conn: conn} do
+      conn = put(conn, ~p"/api/slides/abc", slide: @update_attrs)
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
+    end
   end
 
   describe "delete slide" do
@@ -112,6 +145,18 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
 
       conn = get(conn, ~p"/api/slides/#{slide}")
       assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
+    end
+
+    test "returns error when slide is not found", %{conn: conn} do
+      non_existing_id = 42
+
+      conn = delete(conn, ~p"/api/slides/#{non_existing_id}")
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
+    end
+
+    test "returns error when passing invalid param", %{conn: conn} do
+      conn = delete(conn, ~p"/api/slides/abc")
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
     end
   end
 
