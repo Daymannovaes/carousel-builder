@@ -25,16 +25,16 @@ defmodule CarouselBuilderWeb.CarouselJSON do
   end
 
   defp render_slides(slides) when is_list(slides) do
-    Enum.map(slides, fn slide ->
-      %{
-        id: slide.id,
-        background_color: slide.background_color,
-        font_color: slide.font_color,
-        position: slide.position,
-        quill_delta_content: slide.quill_delta_content
-      }
+    slides
+    |> List.wrap()
+    |> Enum.map(fn slide ->
+        %{
+          id: slide.id,
+          background_color: slide.background_color,
+          font_color: slide.font_color,
+          position: slide.position,
+          quill_delta_content: slide.quill_delta_content
+        }
     end)
   end
-
-  defp render_slides(_), do: []
 end
