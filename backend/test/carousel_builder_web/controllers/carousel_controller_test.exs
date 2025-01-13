@@ -152,7 +152,52 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
     end
   end
 
-  describe "update settings in carousel" do
+  describe "update carousel slides" do
+    setup [:create_carousel]
+
+    test "renders carousel when data is valid", %{
+      conn: conn,
+      carousel: %Carousel{id: id} = carousel
+    } do
+      conn = put(conn, ~p"/api/carousels/#{carousel}/slides", carousel: @update_attrs)
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+      conn = get(conn, ~p"/api/carousels/#{id}")
+
+      assert %{
+               "id" => ^id,
+               "is_active" => false,
+               "name" => "some updated name",
+               "slides" => [
+                 %{
+                   "background_color" => "#000000",
+                   "font_color" => "#FFFFFF",
+                   "position" => 1,
+                   "quill_delta_content" => "quill_content_2"
+                 }
+               ]
+             } = json_response(conn, 200)["data"]
+    end
+
+    test "renders errors when data is invalid", %{conn: conn, carousel: carousel} do
+      conn = put(conn, ~p"/api/carousels/#{carousel.id}/slides", carousel: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "returns error when carousel is not found", %{conn: conn} do
+      non_existing_id = 42
+
+      conn = put(conn, ~p"/api/carousels/#{non_existing_id}/slides", carousel: @update_attrs)
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
+    end
+
+    test "returns error when passing invalid param", %{conn: conn} do
+      conn = put(conn, ~p"/api/carousels/abc/slides", carousel: @update_attrs)
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
+    end
+  end
+
+  describe "update carousel settings" do
     setup [:create_carousel]
 
     test "renders updated carousel when settings are valid", %{
