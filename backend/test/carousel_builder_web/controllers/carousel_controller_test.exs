@@ -34,8 +34,8 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
   @invalid_attrs %{name: nil, is_active: nil}
 
   @valid_settings %{
-    background_color: "#000000",
-    font_color: "#FFFFFF"
+    background_color: "#FF00FF",
+    font_color: "#00FF00"
   }
 
   @invalid_settings %{

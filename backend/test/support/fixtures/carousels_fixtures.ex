@@ -15,14 +15,14 @@ defmodule CarouselBuilder.CarouselsFixtures do
         name: "some name",
         slides: [
           %{
-            background_color: "#FFFFFF",
-            font_color: "#000000",
+            background_color: "#005BBB",
+            font_color: "#FFD500",
             position: 1,
             quill_delta_content: "quill_content_1"
           },
           %{
-            background_color: "#FF0000",
-            font_color: "#00FF00",
+            background_color: "#009246",
+            font_color: "#CE2B37",
             position: 2,
             quill_delta_content: "quill_content_2"
           }

@@ -4,8 +4,8 @@ defmodule CarouselBuilder.CarouselsTest do
   alias CarouselBuilder.Carousels
 
   @valid_settings %{
-    "background_color" => "#000000",
-    "font_color" => "#FFFFFF"
+    "background_color" => "#FF0000",
+    "font_color" => "#0000FF"
   }
 
   @invalid_settings %{
@@ -14,7 +14,7 @@ defmodule CarouselBuilder.CarouselsTest do
   }
 
   @invalid_settings_fields %{
-    "invalid_field" => "invalid value"
+    "invalid_field" => ["invalid value"]
   }
 
   describe "carousels" do
