@@ -3,6 +3,20 @@ defmodule CarouselBuilder.CarouselsTest do
 
   alias CarouselBuilder.Carousels
 
+  @valid_settings %{
+    "background_color" => "#000000",
+    "font_color" => "#FFFFFF"
+  }
+
+  @invalid_settings %{
+    "background_color" => nil,
+    "font_color" => nil
+  }
+
+  @invalid_settings_fields %{
+    "invalid_field" => "invalid value"
+  }
+
   describe "carousels" do
     alias CarouselBuilder.Carousels.Carousel
 
@@ -48,46 +62,21 @@ defmodule CarouselBuilder.CarouselsTest do
     end
 
     test "update_all_slides_settings/2 with no slides and valid params should not fail" do
-      carousel = carousel_fixture()
+      carousel = carousel_fixture(%{slides: []})
 
-      settings = %{
-        "background_color" => "#000000",
-        "font_color" => "#FFFFFF"
-      }
-
-      updated_carousel = Carousels.update_all_slides_settings(carousel, settings)
+      updated_carousel = Carousels.update_all_slides_settings(carousel, @valid_settings)
 
       assert updated_carousel.slides == []
     end
 
     test "update_all_slides_settings/2 with valid params updates all slides of a carousel" do
-      carousel =
-        carousel_fixture(%{
-          slides: [
-            %{
-              background_color: "#FFFFFF",
-              font_color: "#000000",
-              position: 1,
-              quill_delta_content: "quill_content_1"
-            },
-            %{
-              background_color: "#FF0000",
-              font_color: "#00FF00",
-              position: 2,
-              quill_delta_content: "quill_content_2"
-            }
-          ]
-        })
+      carousel = carousel_fixture()
 
-      settings = %{
-        "background_color" => "#0000FF",
-        "font_color" => "#FFFFFF"
-      }
-
-      updated_carousel = Carousels.update_all_slides_settings(carousel, settings)
+      updated_carousel = Carousels.update_all_slides_settings(carousel, @valid_settings)
 
       assert Enum.all?(updated_carousel.slides, fn slide ->
-               slide.background_color == "#0000FF" and slide.font_color == "#FFFFFF"
+               slide.background_color == @valid_settings["background_color"] and
+                 slide.font_color == @valid_settings["font_color"]
              end)
 
       assert length(updated_carousel.slides) == 2
@@ -96,28 +85,20 @@ defmodule CarouselBuilder.CarouselsTest do
     test "update_all_slides_settings/2 with invalid params raises error" do
       carousel = carousel_fixture()
 
-      invalid_settings = %{
-        "invalid_field" => "value"
-      }
-
-      invalid_params_type = nil
+      assert {:error, :bad_request} ==
+               Carousels.update_all_slides_settings(carousel, @invalid_settings)
 
       assert {:error, :bad_request} ==
-               Carousels.update_all_slides_settings(carousel, invalid_settings)
+               Carousels.update_all_slides_settings(carousel, @invalid_settings_fields)
 
       assert {:error, :bad_request} ==
-               Carousels.update_all_slides_settings(carousel, invalid_params_type)
+               Carousels.update_all_slides_settings(carousel, nil)
     end
 
     test "update_all_slides_settings/2 with invalid carousel returns nil" do
       invalid_carousel = %Carousel{id: 0}
 
-      settings = %{
-        "background_color" => "#0000FF",
-        "font_color" => "#FFFFFF"
-      }
-
-      assert is_nil(Carousels.update_all_slides_settings(invalid_carousel, settings))
+      assert is_nil(Carousels.update_all_slides_settings(invalid_carousel, @valid_settings))
     end
 
     test "delete_carousel/1 deletes the carousel" do

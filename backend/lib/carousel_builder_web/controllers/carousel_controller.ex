@@ -57,19 +57,20 @@ defmodule CarouselBuilderWeb.CarouselController do
   end
 
   def update_settings(conn, %{"id" => id, "settings" => settings_params}) do
-    case value_is_positive_integer?(id) do
-      true ->
-        case Carousels.get_carousel(id) do
-          nil ->
-            {:error, :not_found}
-
-          carousel ->
-            updated_carousel = Carousels.update_all_slides_settings(carousel, settings_params)
-            render(conn, :show, carousel: updated_carousel)
-        end
-
-      _ ->
+    with true <- value_is_positive_integer?(id),
+         %Carousel{} = carousel <- Carousels.get_carousel(id),
+         {:ok, %Carousel{} = updated_carousel} <-
+           Carousels.update_all_slides_settings(carousel, settings_params) do
+      render(conn, :show, carousel: updated_carousel)
+    else
+      false ->
         {:error, :bad_request}
+
+      nil ->
+        {:error, :not_found}
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 

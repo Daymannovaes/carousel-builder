@@ -163,7 +163,7 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
   end
 
   defp create_slide(_) do
-    carousel = carousel_fixture()
+    carousel = carousel_fixture(%{slides: []})
     slide = slide_fixture(%{carousel_id: carousel.id})
     %{carousel: carousel, slide: slide}
   end

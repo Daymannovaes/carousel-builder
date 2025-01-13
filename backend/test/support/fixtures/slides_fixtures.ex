@@ -15,7 +15,7 @@ defmodule CarouselBuilder.SlidesFixtures do
   Generate a slide.
   """
   def slide_fixture(attrs \\ %{}) do
-    carousel = carousel_fixture()
+    carousel = carousel_fixture(%{slides: []})
 
     {:ok, slide} =
       attrs
