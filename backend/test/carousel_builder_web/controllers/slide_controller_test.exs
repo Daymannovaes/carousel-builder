@@ -14,12 +14,14 @@ defmodule CarouselBuilderWeb.SlideControllerTest do
     font_color: "some font_color",
     quill_delta_content: "some quill_delta_content"
   }
+
   @update_attrs %{
     position: 43,
     background_color: "some updated background_color",
     font_color: "some updated font_color",
     quill_delta_content: "some updated quill_delta_content"
   }
+
   @invalid_attrs %{
     position: nil,
     background_color: nil,

@@ -102,10 +102,10 @@ defmodule CarouselBuilder.CarouselsTest do
 
       invalid_params_type = nil
 
-      assert {:error, "Invalid input"} ==
+      assert {:error, :bad_request} ==
                Carousels.update_all_slides_settings(carousel, invalid_settings)
 
-      assert {:error, "Invalid input"} ==
+      assert {:error, :bad_request} ==
                Carousels.update_all_slides_settings(carousel, invalid_params_type)
     end
 

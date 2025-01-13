@@ -94,7 +94,7 @@ defmodule CarouselBuilder.Carousels do
       %Carousel{}
 
       iex> update_all_slides_settings(carousel, %{field: bad_value})
-      {:error, "Invalid input"}
+      {:error, :bad_request}
 
   """
   def update_all_slides_settings(%Carousel{} = carousel, params) when is_map(params) do
@@ -110,7 +110,7 @@ defmodule CarouselBuilder.Carousels do
         case {key, value} do
           {"background_color", value} when is_binary(value) -> {String.to_atom(key), value}
           {"font_color", value} when is_binary(value) -> {String.to_atom(key), value}
-          _ -> nil
+          _invalid_key -> nil
         end
       end)
       |> Enum.filter(& &1)

@@ -29,7 +29,7 @@ defmodule CarouselBuilderWeb.SlideController do
             {:error, changeset}
         end
 
-      _ ->
+      _not_integer ->
         {:error, :bad_request}
     end
   end
@@ -42,7 +42,7 @@ defmodule CarouselBuilderWeb.SlideController do
           slide -> render(conn, :show, slide: slide)
         end
 
-      _ ->
+      _not_integer ->
         {:error, :bad_request}
     end
   end
@@ -60,7 +60,7 @@ defmodule CarouselBuilderWeb.SlideController do
             end
         end
 
-      _ ->
+      _not_integer ->
         {:error, :bad_request}
     end
   end
@@ -80,7 +80,7 @@ defmodule CarouselBuilderWeb.SlideController do
             end
         end
 
-      _ ->
+      _not_integer ->
         {:error, :bad_request}
     end
   end

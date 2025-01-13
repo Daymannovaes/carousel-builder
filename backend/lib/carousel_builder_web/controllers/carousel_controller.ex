@@ -32,7 +32,7 @@ defmodule CarouselBuilderWeb.CarouselController do
           carousel -> render(conn, :show, carousel: carousel)
         end
 
-      _ ->
+      _not_integer ->
         {:error, :bad_request}
     end
   end
@@ -51,7 +51,7 @@ defmodule CarouselBuilderWeb.CarouselController do
             end
         end
 
-      _ ->
+      _not_integer ->
         {:error, :bad_request}
     end
   end
@@ -88,7 +88,7 @@ defmodule CarouselBuilderWeb.CarouselController do
             end
         end
 
-      _ ->
+      _not_integer ->
         {:error, :bad_request}
     end
   end

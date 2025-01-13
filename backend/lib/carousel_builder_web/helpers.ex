@@ -10,7 +10,7 @@ defmodule CarouselBuilderWeb.Helpers do
   def value_is_positive_integer?(value) when is_binary(value) do
     case Integer.parse(value) do
       {int, ""} when int > 0 -> true
-      _ -> false
+      _not_integer -> false
     end
   end
 
