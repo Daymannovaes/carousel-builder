@@ -152,6 +152,59 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
     end
   end
 
+  describe "update settings in carousel" do
+    setup [:create_carousel]
+
+    test "renders updated carousel when settings are valid", %{
+      conn: conn,
+      carousel: %Carousel{id: id} = carousel
+    } do
+      conn = put(conn, ~p"/api/carousels/#{id}/settings", settings: @valid_settings)
+      carousel_response = json_response(conn, 200)
+      slides = carousel_response["data"]["slides"]
+
+      assert carousel_response["data"]["id"] == carousel.id
+      assert length(slides) == 2
+
+      for slide <- slides do
+        assert slide["background_color"] == @valid_settings.background_color
+        assert slide["font_color"] == @valid_settings.font_color
+      end
+    end
+
+    test "returns error when settings has invalid values", %{
+      conn: conn,
+      carousel: %Carousel{id: id}
+    } do
+      conn = put(conn, ~p"/api/carousels/#{id}/settings", settings: @invalid_settings)
+
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
+    end
+
+    test "returns error when settings has invalid fields", %{
+      conn: conn,
+      carousel: %Carousel{id: id}
+    } do
+      conn = put(conn, ~p"/api/carousels/#{id}/settings", settings: @invalid_settings_fields)
+
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
+    end
+
+    test "returns error when carousel is not found", %{conn: conn} do
+      non_existing_id = 42
+
+      conn = put(conn, ~p"/api/carousels/#{non_existing_id}/settings", settings: @valid_settings)
+
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
+    end
+
+    test "returns error when passing invalid param", %{conn: conn} do
+      conn = put(conn, ~p"/api/carousels/abc/settings", settings: @valid_settings)
+
+      assert json_response(conn, 400) == %{"errors" => %{"detail" => "Bad Request"}}
+    end
+  end
+
   describe "delete carousel" do
     setup [:create_carousel]
 
