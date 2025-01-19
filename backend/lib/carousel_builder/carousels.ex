@@ -131,7 +131,7 @@ defmodule CarouselBuilder.Carousels do
     end
   end
 
-  def update_all_slides_settings(_, _), do: {:error, :bad_request}
+  def update_all_slides_settings(_non_carousel, _invalid_params), do: {:error, :bad_request}
 
   @doc """
   Deletes a carousel.

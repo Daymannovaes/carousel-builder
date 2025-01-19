@@ -274,7 +274,7 @@ defmodule CarouselBuilderWeb.CarouselControllerTest do
     end
   end
 
-  defp create_carousel(_) do
+  defp create_carousel(_test_params) do
     carousel = carousel_fixture()
     %{carousel: carousel}
   end
