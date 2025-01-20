@@ -95,7 +95,7 @@ export const displayText = document.getElementById("displayText")!;
 const charCounter = document.getElementById("charCounter")!;
 const errorMessage = document.getElementById("errorMessage")!;
 
-submitButton.addEventListener("click", () => {
+submitButton.addEventListener("click", async () => {
     const text = textInput.value;
     errorMessage.textContent = "";
 
@@ -107,32 +107,41 @@ submitButton.addEventListener("click", () => {
     const splitItems = splitText(text);
 
     if (splitItems) {
-        const { fontColor, backgroundColor } = getConfiguration();
-        displayText.innerHTML = '';
-        const listItems = createListItems(splitItems, { fontColor, backgroundColor });
-        displayText.append(listItems);
-
-        const slides: Slide[] = splitItems.map((item, index) => ({
-            background_color: backgroundColor,
-            font_color: fontColor,
-            position: index + 1,
-            quill_delta_content: item
-        }));
-
-        const carousel: Carousel = {
-            name: "Carousel " + getFormattedDate(),
-            is_active: true,
-            slides: slides
-        };
-
-        createCarousel(carousel);
+        const configuration = getConfiguration();
+        await Promise.all([
+            createHtmlCarousel(splitItems, configuration),
+            createApiCarousel(splitItems, configuration)
+        ]);
     }
 
     return;
 });
 
-listCarouselsButton.addEventListener("click", () => {
-    listCarousels();
+const createHtmlCarousel = (splitItems: string[], configuration: any) => {
+    displayText.innerHTML = '';
+    const listItems = createListItems(splitItems, configuration);
+    displayText.append(listItems);
+};
+
+const createApiCarousel = async (splitItems: string[], configuration: any) => {
+    const slides: Slide[] = splitItems.map((item, index) => ({
+        background_color: configuration.backgroundColor as string,
+        font_color: configuration.fontColor as string,
+        position: index + 1,
+        quill_delta_content: item
+    }));
+
+    const carousel: Carousel = {
+        name: "Carousel " + getFormattedDate(),
+        is_active: true,
+        slides: slides
+    };
+
+    await createCarousel(carousel);
+};
+
+listCarouselsButton.addEventListener("click", async () => {
+    await listCarousels();
 
     return;
 });
@@ -153,7 +162,7 @@ textInput.addEventListener("input", () => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
-    listCarousels();
+    await listCarousels();
 
     return;
 });
