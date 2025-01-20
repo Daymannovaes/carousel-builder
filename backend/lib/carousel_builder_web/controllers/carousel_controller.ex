@@ -1,6 +1,8 @@
 defmodule CarouselBuilderWeb.CarouselController do
   use CarouselBuilderWeb, :controller
 
+  import CarouselBuilderWeb.Helpers
+
   alias CarouselBuilder.{
     Carousels,
     Carousels.Carousel
@@ -23,23 +25,72 @@ defmodule CarouselBuilderWeb.CarouselController do
   end
 
   def show(conn, %{"id" => id}) do
-    carousel = Carousels.get_carousel!(id)
-    render(conn, :show, carousel: carousel)
+    case value_is_positive_integer?(id) do
+      true ->
+        case Carousels.get_carousel(id) do
+          nil -> {:error, :not_found}
+          carousel -> render(conn, :show, carousel: carousel)
+        end
+
+      _not_integer ->
+        {:error, :bad_request}
+    end
   end
 
   def update(conn, %{"id" => id, "carousel" => carousel_params}) do
-    carousel = Carousels.get_carousel!(id)
+    case value_is_positive_integer?(id) do
+      true ->
+        case Carousels.get_carousel(id) do
+          nil ->
+            {:error, :not_found}
 
-    with {:ok, %Carousel{} = carousel} <- Carousels.update_carousel(carousel, carousel_params) do
-      render(conn, :show, carousel: carousel)
+          carousel ->
+            with {:ok, %Carousel{} = carousel} <-
+                   Carousels.update_carousel(carousel, carousel_params) do
+              render(conn, :show, carousel: carousel)
+            end
+        end
+
+      _not_integer ->
+        {:error, :bad_request}
+    end
+  end
+
+  def update_settings(conn, %{"id" => id, "settings" => settings_params}) do
+    with true <- value_is_positive_integer?(id),
+         %Carousel{} = carousel <- Carousels.get_carousel(id),
+         %Carousel{} = updated_carousel <-
+           Carousels.update_all_slides_settings(carousel, settings_params) do
+      render(conn, :show, carousel: updated_carousel)
+    else
+      false ->
+        {:error, :bad_request}
+
+      nil ->
+        {:error, :not_found}
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    carousel = Carousels.get_carousel!(id)
+    case value_is_positive_integer?(id) do
+      true ->
+        case Carousels.get_carousel(id) do
+          nil ->
+            {:error, :not_found}
 
-    with {:ok, %Carousel{}} <- Carousels.delete_carousel(carousel) do
-      send_resp(conn, :no_content, "")
+          carousel ->
+            with {:ok, %Carousel{}} <- Carousels.delete_carousel(carousel) do
+              conn
+              |> put_status(:ok)
+              |> json(%{message: "Carousel deleted successfully", id: id})
+            end
+        end
+
+      _not_integer ->
+        {:error, :bad_request}
     end
   end
 end

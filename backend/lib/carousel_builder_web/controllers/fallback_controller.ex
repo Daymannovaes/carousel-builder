@@ -14,11 +14,19 @@ defmodule CarouselBuilderWeb.FallbackController do
     |> render(:error, changeset: changeset)
   end
 
-  # This clause is an example of how to handle resources that cannot be found.
+  # This clause handles 400 errors.
+  def call(conn, {:error, :bad_request}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(json: CarouselBuilderWeb.ErrorJSON)
+    |> render(:"400")
+  end
+
+  # This clause handles 404 errors.
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
-    |> put_view(html: CarouselBuilderWeb.ErrorHTML, json: CarouselBuilderWeb.ErrorJSON)
+    |> put_view(json: CarouselBuilderWeb.ErrorJSON)
     |> render(:"404")
   end
 end

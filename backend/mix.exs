@@ -9,7 +9,15 @@ defmodule CarouselBuilder.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.cobertura": :test
+      ]
     ]
   end
 
@@ -47,7 +55,8 @@ defmodule CarouselBuilder.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: :test},
       {:oban, "~> 2.17"},
-      {:httpoison, "~> 2.0"}
+      {:httpoison, "~> 2.0"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 

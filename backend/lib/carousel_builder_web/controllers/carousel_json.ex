@@ -18,8 +18,23 @@ defmodule CarouselBuilderWeb.CarouselJSON do
   defp data(%Carousel{} = carousel) do
     %{
       id: carousel.id,
-      carousel: carousel.carousel,
-      status: carousel.status
+      name: carousel.name,
+      is_active: carousel.is_active,
+      slides: render_slides(carousel.slides)
     }
+  end
+
+  defp render_slides(slides) when is_list(slides) do
+    slides
+    |> List.wrap()
+    |> Enum.map(fn slide ->
+      %{
+        id: slide.id,
+        background_color: slide.background_color,
+        font_color: slide.font_color,
+        position: slide.position,
+        quill_delta_content: slide.quill_delta_content
+      }
+    end)
   end
 end
