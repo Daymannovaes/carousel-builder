@@ -1,7 +1,5 @@
 # Carousel Builder
 
----
-
 ## Backend
 
 To start your Phoenix server:
@@ -21,8 +19,9 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
 
----
-
 ## Frontend
 
-(In development)
+  * Run `npm install` to install libraries and dependencies
+  * Start the server with `npm run dev` (or just `vite`)
+
+Now you can visit [`localhost:5173`](http://localhost:5173) from your browser.
