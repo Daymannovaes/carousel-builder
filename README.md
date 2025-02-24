@@ -1,5 +1,10 @@
 # Carousel Builder
 
+## WIP
+
+![image](https://github.com/user-attachments/assets/70484b3c-75d6-446f-a3bb-151190632db9)
+
+
 ## Backend
 
 To start your Phoenix server:
